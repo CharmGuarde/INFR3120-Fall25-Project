@@ -1,0 +1,7 @@
+Project Part 1 Idea
+
+Our product, called Task Manager, is a straightforward web application that lets users create and organize their to-do list or daily activities in one location. By offering a simple interface for adding, viewing, editing, and deleting personal assignments, this program aims to assist users in maintaining organization. By providing a digital platform that is instantly accessible through a browser, it does away with the necessity for paper lists or disorganized notes.
+
+The Task Manager's name and a simple, original team logo will appear at the top of the landing page. Additionally, all of the current tasks will be shown in a table format with details like the work name, description, and completion status. The user can add new tasks to the list by clicking the "Create Task" button, which opens a straightforward form. Complete CRUD functions will be available to users, including the ability to create new tasks, view and edit existing ones, and remove tasks that are no longer required.
+
+This web application focuses on fundamental web development ideas like dynamic content rendering, form-based user interaction, and Node.js and Express backend connection. It is simple to use, lightweight, and displays every component needed for the initial project release, such as a home page, data creation, a functional table view, and functional CRUD functionality. This initial release will concentrate on creating a clear, fully functional foundation; subsequent iterations may incorporate task categories and login systems.
