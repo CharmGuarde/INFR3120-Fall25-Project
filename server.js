@@ -1,50 +1,60 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const path = require('path');
+require('dotenv').config();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Set EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Temporary in-memory data
-let tasks = [];
-let nextId = 1;
+// ✅ Connect to MongoDB Atlas
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ Connected to MongoDB Atlas Cloud'))
+  .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
-// ROUTES
-// Home Page
-app.get('/', (req, res) => {
-  res.render('home'); // render home.ejs
+// ✅ Define Schema and Model
+const taskSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: String
 });
 
-// Contact Page
-app.get('/contact', (req, res) => {
-  res.render('contact'); // render contact.ejs
-});
+const Task = mongoose.model('Task', taskSchema);
 
-// Task Manager Page
-app.get('/tasks', (req, res) => {
+// ✅ ROUTES
+
+// Home page
+app.get('/', (req, res) => res.render('home'));
+
+// Read: List all tasks
+app.get('/tasks', async (req, res) => {
+  const tasks = await Task.find();
   res.render('index', { tasks });
 });
 
-// Add Task
-app.post('/add', (req, res) => {
+// Create: Add a new task
+app.post('/add', async (req, res) => {
   const { title, description } = req.body;
-  if (title) tasks.push({ id: nextId++, title, description });
+  if (title) await Task.create({ title, description });
   res.redirect('/tasks');
 });
 
-// Delete Task
-app.post('/delete/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  tasks = tasks.filter(t => t.id !== id);
+// Update: Edit an existing task
+app.post('/edit/:id', async (req, res) => {
+  const { title, description } = req.body;
+  await Task.findByIdAndUpdate(req.params.id, { title, description });
   res.redirect('/tasks');
 });
 
-app.listen(PORT, () =>
-  console.log(`✅ Server running at http://localhost:${PORT}`)
-);
+// Delete: Remove a task
+app.post('/delete/:id', async (req, res) => {
+  await Task.findByIdAndDelete(req.params.id);
+  res.redirect('/tasks');
+});
+
+// Start Server
+app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
