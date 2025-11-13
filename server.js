@@ -21,6 +21,11 @@ app.get('/', (req, res) => {
   res.render('home'); // render home.ejs
 });
 
+// Contact Page
+app.get('/contact', (req, res) => {
+  res.render('contact'); // render contact.ejs
+});
+
 // Task Manager Page
 app.get('/tasks', (req, res) => {
   res.render('index', { tasks });
