@@ -1,0 +1,24 @@
+.contact-bg {
+  background-color: #f2f6ff; /* light soft blue */
+}
+
+.home-bg {
+  background-color: #f2f6ff;
+}
+
+.tasks-bg {
+  background-color: #ffffff;
+}
+
+.contact-bg {
+  background-color: #f2f6ff;
+}
+
+.site-logo {
+  max-width: 150px;    /* prevents stretching */
+  width: 100%;
+  height: auto;        /* keeps aspect ratio */
+  border-radius: 20px; /* rounded corners */
+  display: block;
+  margin: 0 auto;      /* centers the logo */
+}

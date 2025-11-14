@@ -1,61 +1,76 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
+require('dotenv').config(); // loads environment variables from .env file
+const express = require('express'); // web framework
+const mongoose = require('mongoose'); // MongoDB ODM
+const path = require('path'); // utility for handling file paths
 
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app = express(); // initialize express app
+const PORT = process.env.PORT || 3000; // server port
 
-// Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+// ------------------------------ MIDDLEWARE -------------------------------- //
 
-// ✅ Connect to MongoDB Atlas
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ Connected to MongoDB Atlas Cloud'))
-  .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
-// ✅ Define Schema and Model
-const taskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: String
+app.use(express.urlencoded({ extended: true })); // parse URL-encoded bodies
+app.use(express.static(path.join(__dirname, 'public'))); // serve static files
+app.set('view engine', 'ejs'); // set EJS as templating engine
+app.set('views', path.join(__dirname, 'views')); // set views directory
+
+// ------------------------------ MONGO STUFF ---------------------------------  //
+
+// connects to MongoDB Atlas
+mongoose.connect(process.env.MONGO_URI) // connection string from .env
+  .then(() => console.log('✅ Connected to MongoDB Atlas Cloud')) // success message
+  .catch(err => console.error('❌ MongoDB Connection Error:', err)); // error handling
+
+// define schema and model
+const taskSchema = new mongoose.Schema({ // task schema
+  title: { type: String, required: true }, // title is required
+  description: String // optional description
 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model('Task', taskSchema); // task model
 
-// ✅ ROUTES
+// -------------------------------- ROUTES -------------------------------- //
 
-// Home page
+// contact page
+app.get('/contact', (req, res) => {
+  res.render('contact');
+});
+
+// home page
 app.get('/', (req, res) => res.render('home'));
 
-// Read: List all tasks
+// index page
+app.get('/index', (req, res) => {
+  res.render('index');
+});
+// read: list all tasks
 app.get('/tasks', async (req, res) => {
   const tasks = await Task.find();
   res.render('index', { tasks });
 });
 
-// Create: Add a new task
+// create: adds a new task
 app.post('/add', async (req, res) => {
   const { title, description } = req.body;
   if (title) await Task.create({ title, description });
   res.redirect('/tasks');
 });
 
-// Update: Edit an existing task
+// update: edit an existing task
 app.post('/edit/:id', async (req, res) => {
   const { title, description } = req.body;
   await Task.findByIdAndUpdate(req.params.id, { title, description });
   res.redirect('/tasks');
 });
 
-// Delete: Remove a task
+// delete: remove a task
 app.post('/delete/:id', async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
   res.redirect('/tasks');
 });
 
-// Start Server
+
+
+// start server
 app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
