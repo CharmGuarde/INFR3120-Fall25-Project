@@ -1,119 +1,139 @@
-.contact-bg {
-  background-color: #f2f6ff; /* light soft blue */
-}
-
-.home-bg {
-  background-color: #f2f6ff;
-}
-
-.tasks-bg {
-  background-color: #ffffff;
-}
-
-.contact-bg {
-  background-color: #f2f6ff;
-}
-
-.site-logo {
-  max-width: 150px;    /* prevents stretching */
-  width: 100%;
-  height: auto;        /* keeps aspect ratio */
-  border-radius: 20px; /* rounded corners */
-  display: block;
-  margin: 0 auto;      /* centers the logo */
-}
-
-/* Glass / Blur Aesthetic Background */
+/* ============================================================
+   BACKGROUND: Animated Gradient for the Glass Aesthetic
+============================================================ */
 .glass-bg {
   background: linear-gradient(120deg, #89cff0, #6a5acd, #483d8b);
   background-size: 400% 400%;
-  animation: gradientMove 12s ease infinite;
+  animation: gradientMove 12s ease infinite; /* slow color shift */
 }
 
-/* Animated gradient */
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Glass card */
+
+/* ============================================================
+   UNIVERSAL GLASS CARD STYLE
+   Used on Home, About, and Tasks pages
+============================================================ */
 .glass-card {
   max-width: 480px;
   width: 100%;
-  border-radius: 20px;
   padding: 35px;
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); /* glass blur effect */
   border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
   color: white;
 }
 
-/* Logo */
+
+/* ============================================================
+   LOGO STYLING
+   Used in Navbar, Home Page, Contact Page, About Page
+============================================================ */
 .site-logo {
   max-width: 140px;
-  width: 100%;
-  height: auto;
+  display: block;
+  margin: 0 auto;
   border-radius: 20px;
 }
 
-/* Buttons - subtle glass effect */
+
+/* ============================================================
+   BUTTONS (Glass Themed)
+============================================================ */
 .glass-btn {
   border-radius: 10px;
   backdrop-filter: blur(5px);
 }
 
-/* Glass Navbar */
+
+/* ============================================================
+   NAVBAR (Glass Style)
+============================================================ */
 .glass-nav {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,0.1);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(255,255,255,0.25);
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.nav-logo {
+  height: 35px;
+  border-radius: 8px;
 }
 
 .navbar .nav-link {
   font-weight: 500;
-  margin-left: 10px;
+  color: white !important; /* readable on gradient */
   transition: 0.3s ease;
 }
 
 .navbar .nav-link:hover {
   color: #d0eaff !important;
-  text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+  text-shadow: 0 0 6px rgba(255,255,255,0.7);
 }
 
-/* Logo in navbar */
-.nav-logo {
-  height: 35px;
-  width: auto;
-  border-radius: 8px;
-}
 
-/* Glass Footer */
-.glass-footer {
-  background: rgba(255, 255, 255, 0.12);
+/* ============================================================
+   FOOTER (Glass Style)
+============================================================ */
+footer {
+  background: rgba(255,255,255,0.12);
   backdrop-filter: blur(12px);
   color: white;
-  position: relative;
-  bottom: 0;
+  text-align: center;
+  padding: 10px;
   width: 100%;
+  margin-top: auto; /* keeps footer at bottom */
 }
 
-body {
-  padding-top: 80px; /* prevents navbar from overlapping content */
+
+/* ============================================================
+   PAGE SPACING / CENTERING
+============================================================ */
+.page-container {
+  min-height: calc(100vh - 80px); /* space above + footer area */
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
-/* Make footer stay at bottom */
-html, body {
-  height: 100%;
-}
 
-body {
+/* ============================================================
+   TASK PAGE LAYOUT
+============================================================ */
+
+/* Wrapper that centers the task card */
+.tasks-wrapper {
+  min-height: calc(100vh - 160px); /* adjusts for nav + footer space */
+  padding-top: 80px;               /* moves tasks lower on the page */
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 }
 
-footer {
-  margin-top: auto; /* pushes footer to the bottom */
+/* Table text colors + subtle hover */
+.table {
+  color: white;
+}
+
+.table thead {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255,255,255,0.15);
+}
+
+
+/* ============================================================
+   ABOUT PAGE LAYOUT
+============================================================ */
+.about-wrapper {
+  min-height: calc(100vh - 160px);
+  padding-top: 60px; /* moves content down */
+  text-align: center;
 }
