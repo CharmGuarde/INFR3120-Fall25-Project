@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
+  <title>Student Task Manager</title>
 
-  <!-- bootstrap -->
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- font Awesome -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- CSS -->
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="/styles.css">
 </head>
 
-<body class="home-bg d-flex justify-content-center align-items-center vh-100"> <!-- full viewport height and centers content -->
+<body class="glass-bg d-flex justify-content-center align-items-center vh-100">
 
-  <div class="card shadow-lg p-4 text-center" style="max-width: 500px; width: 100%; border-radius: 20px;"> <!-- card with padding and rounded corners -->
-    <img src="/logo.png" class="site-logo" alt="Logo"> <!-- logo image -->
-    <h1 class="mt-3">Welcome to Task Manager</h1> <!-- title -->
-    <p class="text-muted">Organize your tasks easily and stay productive.</p> 
+  <!-- Glass Card -->
+  <div class="glass-card text-center p-4">
+    <img src="/logo.png" class="site-logo mb-3" alt="Logo">
 
-    <a href="/tasks" class="btn btn-primary w-100 mb-2">Get Started</a> <!-- button -->
-    <a href="/contact" class="btn btn-outline-secondary w-100">Contact Us</a> <!-- button -->
+    <h1 class="fw-bold">Welcome to Task Manager</h1>
+    <p class="text-light">Stay organized, stay productive — built for students.</p>
+
+    <div class="d-grid gap-2 mt-3">
+      <a href="/tasks" class="btn btn-primary glass-btn">Get Started</a>
+      <a href="/about" class="btn btn-outline-light glass-btn">About</a>
+      <a href="/contact" class="btn btn-outline-light glass-btn">Contact Us</a>
+    </div>
   </div>
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

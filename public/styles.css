@@ -22,3 +22,44 @@
   display: block;
   margin: 0 auto;      /* centers the logo */
 }
+
+/* Glass / Blur Aesthetic Background */
+.glass-bg {
+  background: linear-gradient(120deg, #89cff0, #6a5acd, #483d8b);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+/* Animated gradient */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glass card */
+.glass-card {
+  max-width: 480px;
+  width: 100%;
+  border-radius: 20px;
+  padding: 35px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  color: white;
+}
+
+/* Logo */
+.site-logo {
+  max-width: 140px;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+
+/* Buttons - subtle glass effect */
+.glass-btn {
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
