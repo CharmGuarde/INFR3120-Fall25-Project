@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Task Manager</title>
+  <title>About Task Manager</title>
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,27 +17,31 @@
 </head>
 
 <body class="glass-bg d-flex justify-content-center align-items-center vh-100">
+<%- include('partials/navbar'); %>
+  <div class="glass-card p-4 text-center">
 
-  <%- include('partials/navbar'); %>
-
-  <!-- Glass Card -->
-  <div class="glass-card text-center p-4">
+    <!-- Logo -->
     <img src="/logo.png" class="site-logo mb-3" alt="Logo">
 
-    <h1 class="fw-bold">Welcome to Task Manager</h1>
-    <p class="text-light">Stay organized, stay productive.</p>
+    <h1 class="fw-bold mb-2">About Task Manager</h1>
 
-    <div class="d-grid gap-2 mt-3">
-      <a href="/tasks" class="btn btn-primary glass-btn">Get Started</a>
-      <a href="/about" class="btn btn-outline-light glass-btn">About</a>
-      <a href="/contact" class="btn btn-outline-light glass-btn">Contact Us</a>
-    </div>
+    <p class="text-light mb-3">
+      Task Manager is a simple and efficient tool designed to help students stay productive.
+      It allows you to organize assignments, keep track of due dates, and manage your workload
+      without stress.
+    </p>
+
+    <p class="text-light mb-4">
+      This project was built using Node.js, Express, EJS, Bootstrap, and MongoDB Atlas.
+      The goal of the site is to practice full CRUD functionality while maintaining a clean,
+      modern user interface.
+    </p>
+
   </div>
-
-  <%- include('partials/footer'); %>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<%- include('partials/footer'); %>
 </body>
 
 </html>

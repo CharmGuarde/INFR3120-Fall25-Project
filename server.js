@@ -44,6 +44,12 @@ app.get('/', (req, res) => res.render('home'));
 app.get('/index', (req, res) => {
   res.render('index');
 });
+
+// about Page
+app.get('/about', (req, res) => {
+  res.render('about');
+});
+
 // read: list all tasks
 app.get('/tasks', async (req, res) => {
   const tasks = await Task.find();
