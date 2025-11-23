@@ -37,6 +37,17 @@ app.get('/contact', (req, res) => {
   res.render('contact');
 });
 
+// handle contact form submission
+app.post('/contact', (req, res) => {
+  console.log('Contact Form Submission:', req.body);
+  console.log('Name:', req.body.name);
+  console.log('Email:', req.body.email);
+  console.log('Message:', req.body.message);
+  res.redirect('/'); // redirect to home page after submission
+
+  res.send('div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;"><h2>Thank you for contacting us!</h2><p>We have received your message and will get back to you shortly.</p><a href="/" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">Return to Home Page</a></div>');
+});
+
 // home page
 app.get('/', (req, res) => res.render('home'));
 
