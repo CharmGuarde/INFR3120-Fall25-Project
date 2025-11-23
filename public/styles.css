@@ -1,18 +1,9 @@
 /* ============================================================
-   BACKGROUND: Animated Gradient for the Glass Aesthetic
+   BACKGROUND: simple light gray for contrast
 ============================================================ */
 .glass-bg {
-  background: linear-gradient(120deg, #89cff0, #6a5acd, #483d8b);
-  background-size: 400% 400%;
-  animation: gradientMove 12s ease infinite; /* slow color shift */
+  background-color: #f2f2f2;
 }
-
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 
 /* ============================================================
    UNIVERSAL GLASS CARD STYLE
