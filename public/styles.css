@@ -7,7 +7,7 @@
 
 /* ============================================================
    UNIVERSAL GLASS CARD STYLE
-   Used on Home, About, and Tasks pages
+   Used on Home, About; resources area aswell, and Tasks pages
 ============================================================ */
 .glass-card {
   max-width: 480px;
@@ -20,6 +20,11 @@
   box-shadow: 0 8px 32px rgba(0,0,0,0.25);
   color: white;
 }
+
+.glass-list li {
+  margin-bottom: 6px;
+}
+
 
 
 /* ============================================================
