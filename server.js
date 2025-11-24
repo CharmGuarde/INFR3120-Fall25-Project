@@ -1,146 +1,169 @@
-// server.js
-const User = require('./models/User');
-const bcrypt = require('bcrypt');
+// --------------------------------------------------------
+// IMPORTS
+// --------------------------------------------------------
+require('dotenv').config();                 // Load environment variables
+const express = require('express');         // Web framework
+const mongoose = require('mongoose');       // MongoDB
+const path = require('path');               // File paths
+const bcrypt = require('bcrypt');           // Password hashing
+const session = require('express-session'); // Login sessions
+const expressLayouts = require('express-ejs-layouts');
 
-//Register:Create a new user
-app.get('/register', (req, res) => {
-  res.render('register');
-});
+// Models
+const User = require('./models/User');      // User model
+const Task = require('./models/Task');      // Task model (ONLY THIS VERSION!)
 
-app.post('/register', async (req, res) => {
-  //Hash password
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-  //Save user
-  await User.create({
-    username: req.body.username,
-    password: hashedPassword
-  });
 
-  res.redirect('/login');
-});
+// --------------------------------------------------------
+// MIDDLEWARE
+// --------------------------------------------------------
+app.use(express.urlencoded({ extended: true })); // Parse form data
+app.use(express.static(path.join(__dirname, 'public'))); // Static files
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-//Login Page
-app.get('/login', (req, res) => {
-  res.render('login');
-});
+app.use(expressLayouts);
+app.set('layout', 'layout'); // Default layout file
 
-//Login Logic
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+// Session configuration (used for login)
+app.use(
+  session({
+    secret: 'supersecretkey123', // You can replace this
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
-  //Find user
-  const user = await User.findOne({ username });
-  if (user) {
-    //Compare password
-    const match = await bcrypt.compare(password, user.password);
-    if (!ismatch) {
-      return res.send('Invalid username or password');
-    }
-    //Successful login:Save user id in session
-    req.session.userId = user._id;
-    return res.redirect('/tasks');
-  }
-
-  const session = require('express-session'); // session management
-
-require('dotenv').config(); // loads environment variables from .env file
-import express, { urlencoded } from 'express'; // web framework
-import { connect, Schema, model } from 'mongoose'; // MongoDB ODM
-import { join } from 'path'; // utility for handling file paths
-import expressLayouts from 'express-ejs-layouts'; // layout engine
-
-const app = express(); // initialize express app
-const PORT = process.env.PORT || 3000; // server port
-
-// ------------------------------ MIDDLEWARE -------------------------------- //
-
-app.use(urlencoded({ extended: true })); // parse URL-encoded bodies
-app.use(express.static(join(__dirname, 'public'))); // serve static files
-app.set('view engine', 'ejs'); // set EJS as templating engine
-app.set('views', join(__dirname, 'views')); // set views directory
-
-app.use(expressLayouts);              // enable layout engine
-app.set('layout', 'layout');          // default layout file = views/layout.ejs
-
-app.use(session({
-  secret:'supersecretkey123', resave:false, saveUninitialized:false
-})); // session management
-// ------------------------------ MONGO STUFF ---------------------------------  //
-
-connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ Connected to MongoDB Atlas Cloud'))
-  .catch(err => console.error('❌ MongoDB Connection Error:', err));
-
-const taskSchema = new Schema({
-  title: { type: String, required: true },
-  description: String
-});
-
-const Task = model('Task', taskSchema);
-
-//------------------------------ CUSTOM MIDDLEWARE ------------------------------ //
-
-// make user ID available in all views
+// Make userId available inside ALL ejs pages
 app.use((req, res, next) => {
   res.locals.user = req.session.userId;
   next();
 });
 
-// -------------------------------- ROUTES -------------------------------- //
 
-// contact page
-app.get('/contact', (req, res) => {
-  res.render('contact');
+// --------------------------------------------------------
+// DATABASE CONNECTION
+// --------------------------------------------------------
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB Atlas Cloud"))
+  .catch((err) => console.error("❌ MongoDB Error:", err));
+
+
+// --------------------------------------------------------
+// AUTHENTICATION ROUTES
+// --------------------------------------------------------
+
+// Registration page (GET)
+app.get("/register", (req, res) => {
+  res.render("register");
 });
 
-// handle contact form submission
-app.post('/contact', (req, res) => {
-  console.log('Contact Form Submission:', req.body);
-  console.log('Name:', req.body.name);
-  console.log('Email:', req.body.email);
-  console.log('Message:', req.body.message);
-  res.redirect('/'); // redirect to home page after submission
+// Handle registration (POST)
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
 
-  res.send('div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;"><h2>Thank you for contacting us!</h2><p>We have received your message and will get back to you shortly.</p><a href="/" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">Return to Home Page</a></div>');
+  // Hash the password before saving
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await User.create({
+    username,
+    password: hashedPassword,
+  });
+
+  res.redirect("/login");
 });
 
-// home page
-app.get('/', (req, res) => res.render('home'));
+// Login page (GET)
+app.get("/login", (req, res) => {
+  res.render("login");
+});
 
-// about page
-app.get('/about', (req, res) => res.render('about'));
+// Handle login (POST)
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
 
-// tasks page
-app.get('/tasks', async (req, res) => {
+  // Find user in DB
+  const user = await User.findOne({ username });
+  if (!user) return res.send("User not found.");
+
+  // Check password
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.send("Incorrect password.");
+
+  // Save user login into session
+  req.session.userId = user._id;
+  res.redirect("/tasks");
+});
+
+// Logout
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
+});
+
+
+// --------------------------------------------------------
+// LOGIN PROTECTION MIDDLEWARE
+// --------------------------------------------------------
+function requireLogin(req, res, next) {
+  if (!req.session.userId) return res.redirect('/login');
+  next();
+}
+
+
+// --------------------------------------------------------
+// MAIN ROUTES
+// --------------------------------------------------------
+
+// Home
+app.get("/", (req, res) => res.render("home"));
+
+// About
+app.get("/about", (req, res) => res.render("about"));
+
+// Contact (GET)
+app.get("/contact", (req, res) => res.render("contact"));
+
+// Contact (POST)
+app.post("/contact", (req, res) => {
+  console.log("Contact Submission:", req.body);
+  res.redirect("/");
+});
+
+// Show tasks → PROTECTED
+app.get("/tasks", requireLogin, async (req, res) => {
   const tasks = await Task.find();
-  res.render('index', { tasks });
+  res.render("index", { tasks });
 });
 
-// create task
-app.post('/add', async (req, res) => {
+// Create task
+app.post("/add", requireLogin, async (req, res) => {
   const { title, description } = req.body;
   if (title) await Task.create({ title, description });
-  res.redirect('/tasks');
+  res.redirect("/tasks");
 });
 
-// update task
-app.post('/edit/:id', async (req, res) => {
-  const { title, description } = req.body;
-  await Task.findByIdAndUpdate(req.params.id, { title, description });
-  res.redirect('/tasks');
+// Edit task
+app.post("/edit/:id", requireLogin, async (req, res) => {
+  await Task.findByIdAndUpdate(req.params.id, req.body);
+  res.redirect("/tasks");
 });
 
-// delete task
-app.post('/delete/:id', async (req, res) => {
+// Delete task
+app.post("/delete/:id", requireLogin, async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
-  res.redirect('/tasks');
+  res.redirect("/tasks");
 });
 
-app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/login');
-});
 
-// start server
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+// --------------------------------------------------------
+// START SERVER
+// --------------------------------------------------------
+app.listen(PORT, () =>
+  console.log(`🚀 Server running at http://localhost:${PORT}`)
+);

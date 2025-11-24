@@ -1,33 +1,51 @@
-<!--contact form with glass effect, white text-->
-<% layout('layout') %>
+<%- include('partials/navbar') %>
 
-<div class="d-flex justify-content-center align-items-center min-vh-100 bg-dark">
-<div class="glass-card p-4" style="max-width: 500px; width: 100%;">
-<!--Success Message-->
-<% if (typeof successMessage !== 'undefined' && success) { %>
-  <div class="alert alert-success text-center">
-    <%= successMessage %>
-  <h2 class="text-center text-white mb-3">Contact Us</h2>
-  <p class="text-center text-white mb-4">We would love to hear from you! Please fill out the form below to get in touch.</p>
-<!-- simple contact form with name, email, message fields and submit button -->
-  <form action="/contact" method="POST">
-    <!-- Name field -->
-     <div class="input-group mb-3">
-      <span class="input-group-text bg-white"><i class="bi bi-person-fill"></i></span>
-      <input type="text" class="form-control" name="name" placeholder="Your Name" required>
-     </div>
-    <!-- Email field -->
-     <div class="input-group mb-3">
-      <span class="input-group-text bg-white"><i class="bi bi-envelope-fill"></i></span>
-      <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+<div class="d-flex justify-content-center align-items-center w-100">
+  <div class="glass-card p-4" style="max-width: 500px; width: 100%;">
+
+    <% if (typeof successMessage !== "undefined") { %>
+      <div class="alert alert-success text-center">
+        <%= successMessage %>
       </div>
-    <!-- Message field -->
-     <div class="input-group mb-3">
-      <span class="input-group-text bg-white"><i class="bi bi-chat-dots-fill"></i></span>
-      <textarea class="form-control" name="message" rows="4" placeholder="Your Message" required></textarea>
-     </div>   
-    <!-- Submit button -->
-     <div class="d-grid">   
-      <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
-     </div>
-    
+    <% } %>
+
+    <h2 class="text-center text-white mb-3">Contact Us</h2>
+    <p class="text-center text-white mb-4">
+      We would love to hear from you! Please fill out the form below.
+    </p>
+
+    <form action="/contact" method="POST">
+
+      <!-- Name -->
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white"><i class="bi bi-person-fill"></i></span>
+        <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white"><i class="bi bi-envelope-fill"></i></span>
+        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white"><i class="bi bi-telephone-fill"></i></span>
+        <input type="tel" class="form-control" name="phone" placeholder="Your Phone Number (optional)">
+      </div>
+
+      <!-- Message -->
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white"><i class="bi bi-chat-dots-fill"></i></span>
+        <textarea class="form-control" name="message" rows="4" placeholder="Your Message" required></textarea>
+      </div>
+
+      <!-- Submit -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
