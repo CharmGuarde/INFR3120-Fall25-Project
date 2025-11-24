@@ -1,34 +1,34 @@
 require('dotenv').config(); // loads environment variables from .env file
-const express = require('express'); // web framework
-const mongoose = require('mongoose'); // MongoDB ODM
-const path = require('path'); // utility for handling file paths
-const expressLayouts = require('express-ejs-layouts'); // layout engine
+import express, { urlencoded } from 'express'; // web framework
+import { connect, Schema, model } from 'mongoose'; // MongoDB ODM
+import { join } from 'path'; // utility for handling file paths
+import expressLayouts from 'express-ejs-layouts'; // layout engine
 
 const app = express(); // initialize express app
 const PORT = process.env.PORT || 3000; // server port
 
 // ------------------------------ MIDDLEWARE -------------------------------- //
 
-app.use(express.urlencoded({ extended: true })); // parse URL-encoded bodies
-app.use(express.static(path.join(__dirname, 'public'))); // serve static files
+app.use(urlencoded({ extended: true })); // parse URL-encoded bodies
+app.use(express.static(join(__dirname, 'public'))); // serve static files
 app.set('view engine', 'ejs'); // set EJS as templating engine
-app.set('views', path.join(__dirname, 'views')); // set views directory
+app.set('views', join(__dirname, 'views')); // set views directory
 
 app.use(expressLayouts);              // enable layout engine
 app.set('layout', 'layout');          // default layout file = views/layout.ejs
 
 // ------------------------------ MONGO STUFF ---------------------------------  //
 
-mongoose.connect(process.env.MONGO_URI)
+connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Connected to MongoDB Atlas Cloud'))
   .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
-const taskSchema = new mongoose.Schema({
+const taskSchema = new Schema({
   title: { type: String, required: true },
   description: String
 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = model('Task', taskSchema);
 
 // -------------------------------- ROUTES -------------------------------- //
 
