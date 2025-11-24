@@ -20,6 +20,30 @@ app.post('/register', async (req, res) => {
   res.redirect('/login');
 });
 
+//Login Page
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+//Login Logic
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  //Find user
+  const user = await User.findOne({ username });
+  if (user) {
+    //Compare password
+    const match = await bcrypt.compare(password, user.password);
+    if (!ismatch) {
+      return res.send('Invalid username or password');
+    }
+    //Successful login:Save user id in session
+    req.session.userId = user._id;
+    return res.redirect('/tasks');
+  }
+
+  const session = require('express-session'); // session management
+
 require('dotenv').config(); // loads environment variables from .env file
 import express, { urlencoded } from 'express'; // web framework
 import { connect, Schema, model } from 'mongoose'; // MongoDB ODM
@@ -39,6 +63,9 @@ app.set('views', join(__dirname, 'views')); // set views directory
 app.use(expressLayouts);              // enable layout engine
 app.set('layout', 'layout');          // default layout file = views/layout.ejs
 
+app.use(session({
+  secret:'supersecretkey123', resave:false, saveUninitialized:false
+})); // session management
 // ------------------------------ MONGO STUFF ---------------------------------  //
 
 connect(process.env.MONGO_URI)
@@ -51,6 +78,14 @@ const taskSchema = new Schema({
 });
 
 const Task = model('Task', taskSchema);
+
+//------------------------------ CUSTOM MIDDLEWARE ------------------------------ //
+
+// make user ID available in all views
+app.use((req, res, next) => {
+  res.locals.user = req.session.userId;
+  next();
+});
 
 // -------------------------------- ROUTES -------------------------------- //
 
@@ -100,6 +135,11 @@ app.post('/edit/:id', async (req, res) => {
 app.post('/delete/:id', async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
   res.redirect('/tasks');
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/login');
 });
 
 // start server
