@@ -130,10 +130,15 @@ app.get("/about", (req, res) => res.render("about"));
 app.get("/contact", (req, res) => res.render("contact"));
 
 // Contact (POST)
-app.post("/contact", (req, res) => {
+app.post('/contact', (req, res) => {
+  const { name, email, message } = req.body;
+
   console.log("Contact Submission:", req.body);
-  res.redirect("/");
+
+  // Render success page and pass name
+  res.render('contact-success', { name: name });
 });
+
 
 // Show tasks → PROTECTED
 app.get("/tasks", requireLogin, async (req, res) => {
