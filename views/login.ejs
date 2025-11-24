@@ -1,0 +1,19 @@
+<div class="glass-card" style="max-width: 450px; margin: 0 auto;">
+  <h2 class="text-center mb-4">Login</h2>
+  <form action="/login" method="POST">
+    <!-- Username Field -->
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <!-- Password Field -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <!-- submit Button -->
+    <button type="submit" class="btn btn-primary w-100">Login</button>
+  </form>
+  <p class="text-center mt-3">
+    Don't have an account? <a href="/register">Register here</a>
+  </p>
