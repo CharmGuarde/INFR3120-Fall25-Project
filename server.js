@@ -30,7 +30,7 @@ app.set('layout', 'layout');                                      // Default lay
 // User session configuration
 app.use(
   session({
-    secret: 'supersecretkey123',   // Change if you want
+    secret: 'supersecretkey123',   
     resave: false,
     saveUninitialized: false
   })

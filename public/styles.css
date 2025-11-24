@@ -2,7 +2,7 @@
    BACKGROUND: simple light gray for contrast
 ============================================================ */
 .glass-bg {
-  background-image: linear-gradient(to right, rgb(177, 220, 231), rgb(105, 235, 252) )
+  background-image: linear-gradient(to top, rgb(153, 216, 231), rgb(66, 149, 160) )
 }
 
 /* ============================================================
