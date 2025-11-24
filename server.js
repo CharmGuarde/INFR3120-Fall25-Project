@@ -1,3 +1,25 @@
+// server.js
+const User = require('./models/User');
+const bcrypt = require('bcrypt');
+
+//Register:Create a new user
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+app.post('/register', async (req, res) => {
+  //Hash password
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+  //Save user
+  await User.create({
+    username: req.body.username,
+    password: hashedPassword
+  });
+
+  res.redirect('/login');
+});
+
 require('dotenv').config(); // loads environment variables from .env file
 import express, { urlencoded } from 'express'; // web framework
 import { connect, Schema, model } from 'mongoose'; // MongoDB ODM
