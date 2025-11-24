@@ -1,174 +1,185 @@
-// --------------------------------------------------------
-// IMPORTS
-// --------------------------------------------------------
-require('dotenv').config();                 // Load environment variables
-const express = require('express');         // Web framework
-const mongoose = require('mongoose');       // MongoDB
-const path = require('path');               // File paths
-const bcrypt = require('bcrypt');           // Password hashing
-const session = require('express-session'); // Login sessions
-const expressLayouts = require('express-ejs-layouts');
+// -------------------------------------------------------
+//  IMPORTS & ENV SETUP
+// -------------------------------------------------------
+require('dotenv').config();                    // Load .env file
+const express = require('express');            // Web framework
+const mongoose = require('mongoose');          // MongoDB ODM
+const path = require('path');                  // Work with file paths
+const bcrypt = require('bcrypt');              // Password hashing
+const session = require('express-session');    // Login sessions
+const expressLayouts = require('express-ejs-layouts'); // Layout engine
 
-// Models
-const User = require('./models/User');      // User model
-const Task = require('./models/Task');      // Task model (ONLY THIS VERSION!)
+// Load Models
+const Task = require('./models/Task');         // Task model
+const User = require('./models/User');         // User model
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-// --------------------------------------------------------
-// MIDDLEWARE
-// --------------------------------------------------------
-app.use(express.urlencoded({ extended: true })); // Parse form data
-app.use(express.static(path.join(__dirname, 'public'))); // Static files
-app.set('view engine', 'ejs');
+// -------------------------------------------------------
+//  MIDDLEWARE
+// -------------------------------------------------------
+app.use(express.urlencoded({ extended: true }));                  // Parse form data
+app.use(express.static(path.join(__dirname, 'public')));          // Serve static files
+app.set('view engine', 'ejs');                                    // Template engine
 app.set('views', path.join(__dirname, 'views'));
+app.use(expressLayouts);                                          // Layout support
+app.set('layout', 'layout');                                      // Default layout file
 
-app.use(expressLayouts);
-app.set('layout', 'layout'); // Default layout file
-
-// Session configuration (used for login)
+// User session configuration
 app.use(
   session({
-    secret: 'supersecretkey123', // You can replace this
+    secret: 'supersecretkey123',   // Change if you want
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: false
   })
 );
 
-// Make userId available inside ALL ejs pages
+// Make user info available to ALL EJS files
 app.use((req, res, next) => {
-  res.locals.user = req.session.userId;
+  res.locals.user = req.session.userId;        // true/false
+  res.locals.username = req.session.username;  // display name on navbar
   next();
 });
 
 
-// --------------------------------------------------------
-// DATABASE CONNECTION
-// --------------------------------------------------------
+// -------------------------------------------------------
+//  DATABASE CONNECTION
+// -------------------------------------------------------
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Connected to MongoDB Atlas Cloud"))
-  .catch((err) => console.error("❌ MongoDB Error:", err));
+  .then(() => console.log('✅ Connected to MongoDB Atlas Cloud'))
+  .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 
 
-// --------------------------------------------------------
-// AUTHENTICATION ROUTES
-// --------------------------------------------------------
-
-// Registration page (GET)
-app.get("/register", (req, res) => {
-  res.render("register");
-});
-
-// Handle registration (POST)
-app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-
-  // Hash the password before saving
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  await User.create({
-    username,
-    password: hashedPassword,
-  });
-
-  res.redirect("/login");
-});
-
-// Login page (GET)
-app.get("/login", (req, res) => {
-  res.render("login");
-});
-
-// Handle login (POST)
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
-  // Find user in DB
-  const user = await User.findOne({ username });
-  if (!user) return res.send("User not found.");
-
-  // Check password
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.send("Incorrect password.");
-
-  // Save user login into session
-  req.session.userId = user._id;
-  res.redirect("/tasks");
-});
-
-// Logout
-app.get("/logout", (req, res) => {
-  req.session.destroy(() => {
-    res.redirect("/login");
-  });
-});
-
-
-// --------------------------------------------------------
-// LOGIN PROTECTION MIDDLEWARE
-// --------------------------------------------------------
+// -------------------------------------------------------
+//  AUTH MIDDLEWARE (Protect routes)
+// -------------------------------------------------------
 function requireLogin(req, res, next) {
-  if (!req.session.userId) return res.redirect('/login');
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
   next();
 }
 
 
-// --------------------------------------------------------
-// MAIN ROUTES
-// --------------------------------------------------------
+// -------------------------------------------------------
+//  AUTH ROUTES
+// -------------------------------------------------------
 
-// Home
-app.get("/", (req, res) => res.render("home"));
+// Register page
+app.get('/register', (req, res) => {
+  res.render('register');
+});
 
-// About
-app.get("/about", (req, res) => res.render("about"));
+// Save new user
+app.post('/register', async (req, res) => {
+  const { username, email, password } = req.body;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await User.create({
+    username,
+    email,
+    password: hashedPassword
+  });
+
+  res.redirect('/login');
+});
+
+// Login page
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// Login logic
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username });
+  if (!user) return res.send('User not found.');
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.send('Incorrect password.');
+
+  // Store user session
+  req.session.userId = user._id;
+  req.session.username = user.username;
+
+  res.redirect('/tasks');
+});
+
+// Logout user
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/login');
+  });
+});
+
+
+// -------------------------------------------------------
+//  GENERAL ROUTES
+// -------------------------------------------------------
+
+// Home page
+app.get('/', (req, res) => {
+  res.render('home');
+});
+
+// About page
+app.get('/about', (req, res) => {
+  res.render('about');
+});
 
 // Contact (GET)
-app.get("/contact", (req, res) => res.render("contact"));
+app.get('/contact', (req, res) => {
+  res.render('contact');
+});
 
 // Contact (POST)
 app.post('/contact', (req, res) => {
-  const { name, email, message } = req.body;
+  console.log("📩 Contact form submission:", req.body);
 
-  console.log("Contact Submission:", req.body);
-
-  // Render success page and pass name
-  res.render('contact-success', { name: name });
+  res.render('contact-success', {
+    name: req.body.name
+  });
 });
 
 
-// Show tasks → PROTECTED
-app.get("/tasks", requireLogin, async (req, res) => {
+// -------------------------------------------------------
+//  TASK ROUTES
+// -------------------------------------------------------
+
+// List tasks (no login required to view)
+app.get('/tasks', async (req, res) => {
   const tasks = await Task.find();
-  res.render("index", { tasks });
+  res.render('index', { tasks });
 });
 
-// Create task
-app.post("/add", requireLogin, async (req, res) => {
+// Create task (requires login)
+app.post('/add', requireLogin, async (req, res) => {
   const { title, description } = req.body;
   if (title) await Task.create({ title, description });
-  res.redirect("/tasks");
+  res.redirect('/tasks');
 });
 
-// Edit task
-app.post("/edit/:id", requireLogin, async (req, res) => {
+// Edit task (requires login)
+app.post('/edit/:id', requireLogin, async (req, res) => {
   await Task.findByIdAndUpdate(req.params.id, req.body);
-  res.redirect("/tasks");
+  res.redirect('/tasks');
 });
 
-// Delete task
-app.post("/delete/:id", requireLogin, async (req, res) => {
+// Delete task (requires login)
+app.post('/delete/:id', requireLogin, async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
-  res.redirect("/tasks");
+  res.redirect('/tasks');
 });
 
 
-// --------------------------------------------------------
-// START SERVER
-// --------------------------------------------------------
-app.listen(PORT, () =>
-  console.log(`🚀 Server running at http://localhost:${PORT}`)
-);
+// -------------------------------------------------------
+//  START SERVER
+// -------------------------------------------------------
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
