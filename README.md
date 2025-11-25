@@ -1,6 +1,6 @@
 # Charm & Karnan Project Part 1 
 ## Overview
-For our final project, we decided to create a Task Manager. For the first part of the project, we made a simple layout that helped to show what are our main goal was. 
+For our final project, we decided to create a Task Manager. For the first part of the project, we made a simple layout that helped to show what our main goal was, which was creating a simple basic task manager. 
 
 ------------------------------------------------------------------------------------------------
 
@@ -33,7 +33,9 @@ My website has 3 links
 4. Visual Studio Code website
 5. Bootstrap website
 6. Render; used to deploy as live link
-7. MongoDB; used for CRUD 
+7. MongoDB; used for CRUD
+8. Stack Overflow 
+9. W3Schools  
 
 ------------------------------------------------------------------------------------------------
 

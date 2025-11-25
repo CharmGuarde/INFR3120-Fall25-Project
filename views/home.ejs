@@ -10,8 +10,11 @@
     Stay organized and manage your school tasks easily. Track assignments, deadlines, and more.
   </p>
 
-  <a href="/tasks" class="btn btn-primary glass-btn px-4 py-2 w-100">
+  <a 
+    href="<%= user ? '/tasks' : '/login' %>" 
+    class="btn btn-primary glass-btn px-4 py-2 w-100">
     Get Started
   </a>
+
 
 </div>
