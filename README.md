@@ -1,4 +1,4 @@
-# Charm & Karnan Project Part 1 
+# Charm & Karnan Project Part 2 
 ## Overview
 For our final project, we decided to create a Task Manager. For the first part of the project, we made a simple layout that helped to show what our main goal was, which was creating a simple basic task manager. 
 
