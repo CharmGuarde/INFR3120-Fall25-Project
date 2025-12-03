@@ -54,3 +54,98 @@
 
   </div>
 </div>
+
+
+<!-- Sidebar + task list (inserted at placeholder) -->
+<div class="d-flex gap-4 mt-4">
+  <aside class="sidebar bg-dark text-white p-3 rounded" style="width:280px;">
+    <button id="newTaskBtn" class="btn btn-success w-100 mb-3">Create Task</button>
+
+    <ul class="list-group list-group-flush" id="taskList" style="max-height:60vh; overflow:auto;">
+      <% tasks.forEach(task => { %>
+        <li class="list-group-item list-group-item-action bg-transparent text-white d-flex justify-content-between align-items-center task-item"
+            data-id="<%= task._id %>"
+            data-title="<%= task.title %>"
+            data-desc="<%= task.description %>">
+          <span class="task-title small"><%= task.title %></span>
+
+          <div class="btn-group btn-group-sm" role="group">
+            <button type="button" class="btn btn-warning edit-side">Edit</button>
+            <form action="/delete/<%= task._id %>" method="POST" class="m-0">
+              <button type="submit" class="btn btn-danger">Del</button>
+            </form>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  </aside>
+
+  <div class="flex-fill">
+    <!-- Helper text / selected task preview -->
+    <div id="sidebarPreview" class="p-3 text-white">
+      <h5 id="previewTitle" class="mb-1">Select a task or create a new one</h5>
+      <p id="previewDesc" class="small mb-0 text-muted"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const addForm = document.querySelector('form[action="/add"]'); // existing add form
+    if (!addForm) return;
+
+    const titleIn = addForm.querySelector('input[name="title"]');
+    const descIn = addForm.querySelector('textarea[name="description"]');
+    const submitBtn = addForm.querySelector('button[type="submit"]');
+
+    const newBtn = document.getElementById('newTaskBtn');
+    const taskItems = document.querySelectorAll('.task-item');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewDesc = document.getElementById('previewDesc');
+
+    function resetToCreate() {
+      addForm.action = '/add';
+      submitBtn.textContent = 'Add Task';
+      titleIn.value = '';
+      descIn.value = '';
+      previewTitle.textContent = 'Create a new task';
+      previewDesc.textContent = '';
+    }
+
+    newBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      resetToCreate();
+      titleIn.focus();
+      window.scrollTo({ top: addForm.getBoundingClientRect().top + window.scrollY - 20, behavior: 'smooth' });
+    });
+
+    taskItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        // If clicking the edit button, open edit mode; if clicking elsewhere, preview only
+        const isEdit = e.target.classList.contains('edit-side');
+        const id = item.dataset.id;
+        const title = item.dataset.title || '';
+        const desc = item.dataset.desc || '';
+
+        previewTitle.textContent = title || 'Untitled';
+        previewDesc.textContent = desc || '';
+
+        if (isEdit) {
+          addForm.action = '/edit/' + id;
+          submitBtn.textContent = 'Save Changes';
+          titleIn.value = title;
+          descIn.value = desc;
+          titleIn.focus();
+          window.scrollTo({ top: addForm.getBoundingClientRect().top + window.scrollY - 20, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // If user manually edits the form, keep it in "create" mode unless changed by an edit button
+    addForm.addEventListener('input', function() {
+      if (addForm.action.endsWith('/add')) return;
+      // leave edit action intact until user clicks "Create" to reset
+    });
+  })();
+</script>
+

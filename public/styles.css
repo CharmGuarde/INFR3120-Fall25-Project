@@ -133,3 +133,96 @@ footer {
   padding-top: 60px; /* moves content down */
   text-align: center;
 }
+
+/* ============================================================
+  SIDEBAR (Glass Style) - applied site-wide like index
+============================================================ */
+.sidebar {
+  position: fixed;
+  top: 80px; /* sits below navbar */
+  left: 0;
+  bottom: 0;
+  width: 240px;
+  max-width: 80%;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 4px 0 30px rgba(0,0,0,0.28);
+  color: white;
+  overflow-y: auto;
+  z-index: 1050;
+}
+
+/* space the main content when sidebar present */
+.content-with-sidebar {
+  margin-left: 240px;
+  transition: margin-left 0.25s ease;
+}
+
+/* Sidebar navigation list */
+.sidebar .nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar .nav-item {
+  margin-bottom: 8px;
+}
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+  font-weight: 500;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background: rgba(255,255,255,0.08);
+  color: #eaf9ff;
+  text-shadow: 0 0 6px rgba(255,255,255,0.6);
+  transform: translateX(4px);
+}
+
+/* small icon helper inside links */
+.sidebar .nav-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: inline-block;
+}
+
+/* Compact/collapsed variant */
+.sidebar.collapsed {
+  width: 80px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.sidebar.collapsed + .content-with-sidebar {
+  margin-left: 80px;
+}
+.sidebar.collapsed .nav-link > span:not(.nav-icon) {
+  display: none;
+}
+
+/* Responsive: hide off-canvas on small screens, toggle with .show */
+@media (max-width: 991.98px) {
+  .sidebar {
+   transform: translateX(-100%);
+   transition: transform 0.28s ease;
+   width: 240px;
+  }
+  .sidebar.show {
+   transform: translateX(0);
+  }
+  .content-with-sidebar {
+   margin-left: 0;
+  }
+}
