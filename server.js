@@ -143,7 +143,11 @@ app.post('/contact', (req, res) => {
 //  TASK ROUTES
 // -------------------------------------------------------
 
-// Tasks page (now login required to view this page)
+// -------------------------------------------------------
+//  TASK ROUTES
+// -------------------------------------------------------
+
+// Tasks page (login required)
 app.get('/tasks', requireLogin, async (req, res) => {
   const tasks = await Task.find();
   res.render('index', { tasks });
@@ -151,14 +155,28 @@ app.get('/tasks', requireLogin, async (req, res) => {
 
 // Add task
 app.post('/add', requireLogin, async (req, res) => {
-  const { title, description } = req.body;
-  if (title) await Task.create({ title, description });
+  const { title, description, dueDate } = req.body;
+
+  await Task.create({
+    title,
+    description,
+    dueDate: dueDate ? new Date(dueDate) : null,
+    completed: false
+  });
+
   res.redirect('/tasks');
 });
 
 // Edit task
 app.post('/edit/:id', requireLogin, async (req, res) => {
-  await Task.findByIdAndUpdate(req.params.id, req.body);
+  const { title, description, dueDate } = req.body;
+
+  await Task.findByIdAndUpdate(req.params.id, {
+    title,
+    description,
+    dueDate: dueDate ? new Date(dueDate) : null
+  });
+
   res.redirect('/tasks');
 });
 
