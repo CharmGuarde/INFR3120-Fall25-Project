@@ -244,26 +244,29 @@ footer {
 }
 
 /* NEWWWWWWWWWWWWWWWWWWWW */
-/* FINAL UPDATE — Resource Cards Styling */
+
 .resource-card {
-  background: linear-gradient(135deg, #e9f2ff, #cfe2ff);
-  border: none !important;
+  min-height: 320px; /* Bigger space for text */
+  padding: 22px;
   border-radius: 18px;
-  padding: 24px;
-  min-height: 260px; /* Bigger card! */
-  width: 100%;
-  color: #1a1a1a;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   font-size: 1.05rem;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.resource-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+.resource-card .card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
 }
+
+.resource-card a {
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
 
 
 
