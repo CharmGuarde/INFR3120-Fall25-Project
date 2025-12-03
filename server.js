@@ -139,14 +139,13 @@ app.post('/contact', (req, res) => {
 });
 
 
-
 // -------------------------------------------------------
 //  TASK ROUTES
 // -------------------------------------------------------
 
 // Tasks page (login required)
 app.get('/tasks', requireLogin, async (req, res) => {
-  const tasks = await Task.find();
+  const tasks = await Task.find({ user:  req.session.userId }); /* ADDEDDD THIIIISS NEWWWWW */
   res.render('index', { tasks });
 });
 
@@ -155,10 +154,11 @@ app.post('/add', requireLogin, async (req, res) => {
   const { title, description, dueDate } = req.body;
 
   await Task.create({
+    user: req.session.userId, /* ADDEDDD THIIIISS NEWWWWW */
     title,
     description,
     dueDate: dueDate ? new Date(dueDate) : null,
-    completed: false
+    completed: false 
   });
 
   res.redirect('/tasks');
@@ -166,22 +166,22 @@ app.post('/add', requireLogin, async (req, res) => {
 
 // Toggle Completed (Done / Undo)
 app.post('/toggle/:id', requireLogin, async (req, res) => {
-  const task = await Task.findById(req.params.id);
+  const task = await Task.findByOne({_id: req.params.id, user: req.session.userId}); /* ADDEDDD THIIIISS NEWWWWW */
+  if (!task) return res.redirect('/tasks'); /* ADDEDDD THIIIISS NEWWWWW */
   task.completed = !task.completed;
   await task.save();
   res.redirect('/tasks');
 });
 
-
 // Delete task
 app.post('/delete/:id', requireLogin, async (req, res) => {
-  await Task.findByIdAndDelete(req.params.id);
+  await Task.findOneAndDelete({_id: req.params.id, user: req.session.userId}); /* ADDEDDD THIIIISS NEWWWWW */
   res.redirect('/tasks');
 });
 
 // Edit Task Page
 app.get('/edit/:id', requireLogin, async (req, res) => {
-  const task = await Task.findById(req.params.id);
+  await Task.findOneAndUpdate({_id: req.params.id, user: req.session.userId}, req.body); /* ADDEDDD THIIIISS NEWWWWW */
   res.render('edit', { task });
 });
 
