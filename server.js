@@ -164,18 +164,14 @@ app.post('/add', requireLogin, async (req, res) => {
   res.redirect('/tasks');
 });
 
-// Edit task
-app.post('/edit/:id', requireLogin, async (req, res) => {
-  const { title, description, dueDate } = req.body;
-
-  await Task.findByIdAndUpdate(req.params.id, {
-    title,
-    description,
-    dueDate: dueDate ? new Date(dueDate) : null
-  });
-
+// Toggle Completed (Done / Undo)
+app.post('/toggle/:id', requireLogin, async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  task.completed = !task.completed;
+  await task.save();
   res.redirect('/tasks');
 });
+
 
 // Delete task
 app.post('/delete/:id', requireLogin, async (req, res) => {
