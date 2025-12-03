@@ -7,23 +7,14 @@
     <!-- Add Task Form -->
     <form action="/add" method="POST" class="mb-4">
       <div class="row">
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-3">
           <label class="form-label text-white">Title</label>
           <input type="text" name="title" class="form-control" required placeholder="Task name">
         </div>
 
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-3">
           <label class="form-label text-white">Due Date</label>
           <input type="date" name="dueDate" class="form-control">
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <label class="form-label text-white">Priority</label>
-          <select name="priority" class="form-select">
-            <option>High</option>
-            <option selected>Medium</option>
-            <option>Low</option>
-          </select>
         </div>
       </div>
 
@@ -35,68 +26,60 @@
       <button class="btn btn-primary w-100 glass-btn">Add Task</button>
     </form>
 
-    <!-- Task List Table -->
-    <table class="table table-hover text-white">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Due</th>
-          <th>Priority</th>
-          <th>Status</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
+    <!-- Task List -->
+    <div class="task-table-wrapper mt-4">
+      <h3 class="text-white mb-3">Task List</h3>
 
-      <tbody>
-        <% tasks.forEach(task => { %>
-        <tr style="<%= task.completed ? 'opacity:0.5; text-decoration:line-through;' : '' %>">
-          <td><%= task.title %></td>
+      <% if (tasks.length === 0) { %>
+        <p class="text-center text-light">No tasks yet. Add one above! 😊</p>
+      <% } else { %>
 
-          <td>
-            <%= task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '—' %>
-          </td>
+      <table class="table table-hover table-bordered align-middle">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Due</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
 
-          <td>
-            <% if (task.priority === 'High') { %>
-              <span class="badge bg-danger">High</span>
-            <% } else if (task.priority === 'Low') { %>
-              <span class="badge bg-success">Low</span>
-            <% } else { %>
-              <span class="badge bg-warning text-dark">Medium</span>
-            <% } %>
-          </td>
+        <tbody>
+          <% tasks.forEach(task => { %>
+          <tr class="task-row <%= task.completed ? 'completed-task' : '' %>">
+            <td><%= task.title %></td>
 
-          <td>
-            <% if (task.completed) { %>
-              ✔ Done
-            <% } else { %>
-              ⏳ Active
-            <% } %>
-          </td>
+            <td>
+              <%= task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '—' %>
+            </td>
 
-          <!-- Action Buttons -->
-          <td class="text-center">
+            <td>
+              <% if (task.completed) { %>
+                ✔ Done
+              <% } else { %>
+                ⏳ Active
+              <% } %>
+            </td>
 
-            <!-- Toggle Completed -->
-            <form action="/toggle/<%= task._id %>" method="POST" class="d-inline">
-              <button class="btn btn-sm btn-success"><%= task.completed ? 'Undo' : 'Done' %></button>
-            </form>
+            <td class="text-center">
+              <form action="/toggle/<%= task._id %>" method="POST" class="d-inline">
+                <button class="btn btn-sm btn-success"><%= task.completed ? 'Undo' : 'Done' %></button>
+              </form>
+              <form action="/edit/<%= task._id %>" method="POST" class="d-inline">
+                <button class="btn btn-sm btn-warning">Edit</button>
+              </form>
+              <form action="/delete/<%= task._id %>" method="POST" class="d-inline">
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
 
-            <!-- Edit -->
-            <form action="/edit/<%= task._id %>" method="POST" class="d-inline">
-              <button class="btn btn-sm btn-warning">Edit</button>
-            </form>
-
-            <!-- Delete -->
-            <form action="/delete/<%= task._id %>" method="POST" class="d-inline">
-              <button class="btn btn-sm btn-danger">Delete</button>
-            </form>
-
-          </td>
-        </tr>
-        <% }) %>
-      </tbody>
-    </table>
+      <% } %>
+    </div>
 
   </div>
 </div>
+`
