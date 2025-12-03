@@ -267,6 +267,11 @@ footer {
   word-break: break-word;
 }
 
+.card-title i {
+  font-size: 1.4rem;
+  color: #0d6efd;
+}
+
 
 
 
