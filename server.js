@@ -163,6 +163,12 @@ app.post('/contact', (req, res) => {
   });
 });
 
+// NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW CODE -------------------------
+// Settings Page
+app.get('/settings', requireLogin, (req, res) => {
+  res.render('settings');
+});
+
 
 // -------------------------------------------------------
 //  TASK ROUTES

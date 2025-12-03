@@ -24,7 +24,11 @@
         <li class="nav-item"><a class="nav-link text-dark" href="/">Home</a></li>
         <li class="nav-item"><a class="nav-link text-dark" href="/about">About</a></li>
         <li class="nav-item"><a class="nav-link text-dark" href="/contact">Contact</a></li>
-        <li><a href="/reset-password">Reset Password</a></li> <!-- Added reset password link NEWWWWWWWWWWWWWWW -->
+        <!-- NEW CODE SETTINGS-->
+        <li class="nav-item">
+          <a class="nav-link" href="/settings">Settings</a>
+        </li> 
+
 
         <% if (user) { %>
           <!-- Greeting -->
@@ -36,7 +40,6 @@
 
           <!-- Logged-in links -->
           <li class="nav-item"><a class="nav-link text-dark" href="/tasks">Tasks</a></li>
-          <li class="nav-item"><a class="nav-link text-dark" href="/logout">Logout</a></li>
 
         <% } else { %>
           <!-- Guest links -->
