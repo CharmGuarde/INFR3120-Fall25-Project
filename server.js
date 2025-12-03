@@ -116,6 +116,31 @@ app.get('/logout', (req, res) => {
   });
 });
 
+// NEWWWW CODE ---------------
+
+// Reset Password Page
+app.get('/reset-password', requireLogin, (req, res) => {
+  res.render('reset-password', { message: null });
+});
+
+// Handle Password Reset
+app.post('/reset-password', requireLogin, async (req, res) => {
+  const { newPassword, confirmPassword } = req.body;
+
+  // Check if passwords match
+  if (newPassword !== confirmPassword) {
+    return res.render('reset-password', { message: "Passwords do not match!" });
+  }
+
+  // Hash new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Update user password in database
+  await User.findByIdAndUpdate(req.session.userId, { password: hashedPassword });
+
+  res.render('reset-password', { message: "Password updated successfully!" });
+});
+// NEWWWW CODE ----------------
 
 // -------------------------------------------------------
 //  GENERAL ROUTES
