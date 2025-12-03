@@ -226,11 +226,7 @@ footer {
    margin-left: 0;
   }
 }
-
-
-
-
-
+/* NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 8*/
 /* Task table spacing fix */
 .task-table-wrapper {
   margin-top: 20px;
@@ -245,4 +241,18 @@ footer {
 /* Cleaner table borders */
 .table-bordered > :not(caption) > * > * {
   border-color: rgba(255,255,255,0.2) !important;
+}
+
+/* NEWWWWWWWWWWWWWWWWWWWW */
+.resource-card {
+  background: linear-gradient(135deg, #e9f2ff, #cfe2ff);
+  border: none;
+  border-radius: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.resource-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.25);
 }

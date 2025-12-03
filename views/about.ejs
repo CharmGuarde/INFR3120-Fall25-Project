@@ -1,37 +1,66 @@
-<!-- about page content centered vertically and horizontally with flexbox -->
+<!-- about page content centered vertically -->
 <div class="about-wrapper d-flex flex-column justify-content-start align-items-center w-100">
 
-
-  <!-- logo -->
+  <!-- Site Logo -->
   <img src="/logo.png" class="site-logo mb-4" alt="Logo">
 
-  <!--glass card for text -->
+  <!-- Main About Card -->
   <div class="glass-card text-center" style="max-width: 700px;">
-
     <h1 class="fw-bold mb-3">About Task Manager</h1>
-    <!-- description text with light color -->
     <p class="text-light">
       Task Manager is a simple and clean tool designed to help students stay 
-      organized. Track assignments, manage deadlines, and keep all your 
-      school tasks in one place — easily and efficiently.
+      organized by tracking tasks, deadlines, and academic responsibilities.
     </p>
-  
-  <!-- resources used section -->
-  <div class="glass-card mt-4" style="max-width: 700px">
-    <h2 class="fw-bold mb-3">Resources Used</h2>
-
-    <!--- bulleted list of resources used with blue text -->
-    <ul class="text-blue-600 text-start" style="list-style: none; padding-left: 0">
-      <li>- Bootstrap</li>
-      <li>- Font Awesome</li>
-      <li>- Express.js</li>
-      <li>- EJS Templating</li>
-      <li>- Custom CSS for Glass Effect</li>
-      <li>- Node.js</li>
-      <li>-Canva for logo</li>
-    </ul>
-
   </div>
-    
+
+  <!-- ✨ NEW: Cards for listing resources used per page -->
+  <!-- Purpose: let us cite sources for each major feature required in rubric -->
+  <div class="container mt-5" style="max-width: 900px;">
+    <h2 class="fw-bold text-white mb-4 text-center">Resources Used Per Page</h2>
+
+    <div class="row justify-content-center g-4">
+
+      <!-- Home Page Card -->
+      <div class="col-md-3">
+        <div class="resource-card card shadow-sm p-2 h-100">
+          <div class="card-body">
+            <h5 class="card-title">Home Page</h5>
+            <p class="card-text small">• (Add sources used for home design here)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Page Card -->
+      <div class="col-md-3">
+        <div class="resource-card card shadow-sm p-2 h-100">
+          <div class="card-body">
+            <h5 class="card-title">About Page</h5>
+            <p class="card-text small">• Example: Canva logo • Glass card CSS</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks Page Card -->
+      <div class="col-md-3">
+        <div class="resource-card card shadow-sm p-2 h-100">
+          <div class="card-body">
+            <h5 class="card-title">Task Page</h5>
+            <p class="card-text small">• Example: Bootstrap Tables • EJS loops</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Page Card -->
+      <div class="col-md-3">
+        <div class="resource-card card shadow-sm p-2 h-100">
+          <div class="card-body">
+            <h5 class="card-title">Contact Page</h5>
+            <p class="card-text small">• Example: Form styling / Email layout</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
+
 </div>
