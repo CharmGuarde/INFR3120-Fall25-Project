@@ -62,14 +62,16 @@
             </td>
 
             <td class="text-center">
+
               <form action="/toggle/<%= task._id %>" method="POST" class="d-inline">
                 <button class="btn btn-sm btn-success"><%= task.completed ? 'Undo' : 'Done' %></button>
               </form>
-              <form action="/edit/<%= task._id %>" method="POST" class="d-inline">
-                <button class="btn btn-sm btn-warning">Edit</button>
-              </form>
+
+              <a href="/edit/<%= task._id %>" class="btn btn-sm btn-warning">Edit</a>
+
               <form action="/delete/<%= task._id %>" method="POST" class="d-inline">
                 <button class="btn btn-sm btn-danger">Delete</button>
+                
               </form>
             </td>
           </tr>
