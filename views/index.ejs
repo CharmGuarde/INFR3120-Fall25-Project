@@ -1,47 +1,93 @@
-<div class="tasks-wrapper d-flex justify-content-center align-items-start w-100">
-  <div class="glass-card w-100" style="max-width: 900px;">
+<div class="page-container d-flex justify-content-center w-100">
+  <div class="glass-card w-100" style="max-width: 850px;">
 
     <!-- Page Title -->
     <h1 class="text-center text-white mb-4">Your Tasks</h1>
 
     <!-- Add Task Form -->
     <form action="/add" method="POST" class="mb-4">
-      <div class="mb-3">
-        <label class="form-label text-white">Task Title</label>
-        <input type="text" name="title" class="form-control" placeholder="Enter task" required>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label text-white">Title</label>
+          <input type="text" name="title" class="form-control" required placeholder="Task name">
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label class="form-label text-white">Due Date</label>
+          <input type="date" name="dueDate" class="form-control">
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label class="form-label text-white">Priority</label>
+          <select name="priority" class="form-select">
+            <option>High</option>
+            <option selected>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
       </div>
 
       <div class="mb-3">
         <label class="form-label text-white">Description</label>
-        <textarea name="description" class="form-control" rows="3" placeholder="Add description..."></textarea>
+        <textarea name="description" class="form-control" rows="2"></textarea>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100 glass-btn">Add Task</button>
+      <button class="btn btn-primary w-100 glass-btn">Add Task</button>
     </form>
 
-    <!-- Tasks Table -->
+    <!-- Task List Table -->
     <table class="table table-hover text-white">
       <thead>
         <tr>
           <th>Title</th>
-          <th>Description</th>
+          <th>Due</th>
+          <th>Priority</th>
+          <th>Status</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
 
       <tbody>
         <% tasks.forEach(task => { %>
-        <tr>
+        <tr style="<%= task.completed ? 'opacity:0.5; text-decoration:line-through;' : '' %>">
           <td><%= task.title %></td>
-          <td><%= task.description %></td>
+
+          <td>
+            <%= task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '—' %>
+          </td>
+
+          <td>
+            <% if (task.priority === 'High') { %>
+              <span class="badge bg-danger">High</span>
+            <% } else if (task.priority === 'Low') { %>
+              <span class="badge bg-success">Low</span>
+            <% } else { %>
+              <span class="badge bg-warning text-dark">Medium</span>
+            <% } %>
+          </td>
+
+          <td>
+            <% if (task.completed) { %>
+              ✔ Done
+            <% } else { %>
+              ⏳ Active
+            <% } %>
+          </td>
+
+          <!-- Action Buttons -->
           <td class="text-center">
 
-            <!-- Edit Form -->
+            <!-- Toggle Completed -->
+            <form action="/toggle/<%= task._id %>" method="POST" class="d-inline">
+              <button class="btn btn-sm btn-success"><%= task.completed ? 'Undo' : 'Done' %></button>
+            </form>
+
+            <!-- Edit -->
             <form action="/edit/<%= task._id %>" method="POST" class="d-inline">
               <button class="btn btn-sm btn-warning">Edit</button>
             </form>
 
-            <!-- Delete Form -->
+            <!-- Delete -->
             <form action="/delete/<%= task._id %>" method="POST" class="d-inline">
               <button class="btn btn-sm btn-danger">Delete</button>
             </form>
@@ -54,98 +100,3 @@
 
   </div>
 </div>
-
-
-<!-- Sidebar + task list (inserted at placeholder) -->
-<div class="d-flex gap-4 mt-4">
-  <aside class="sidebar bg-dark text-white p-3 rounded" style="width:280px;">
-    <button id="newTaskBtn" class="btn btn-success w-100 mb-3">Create Task</button>
-
-    <ul class="list-group list-group-flush" id="taskList" style="max-height:60vh; overflow:auto;">
-      <% tasks.forEach(task => { %>
-        <li class="list-group-item list-group-item-action bg-transparent text-white d-flex justify-content-between align-items-center task-item"
-            data-id="<%= task._id %>"
-            data-title="<%= task.title %>"
-            data-desc="<%= task.description %>">
-          <span class="task-title small"><%= task.title %></span>
-
-          <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn btn-warning edit-side">Edit</button>
-            <form action="/delete/<%= task._id %>" method="POST" class="m-0">
-              <button type="submit" class="btn btn-danger">Del</button>
-            </form>
-          </div>
-        </li>
-      <% }) %>
-    </ul>
-  </aside>
-
-  <div class="flex-fill">
-    <!-- Helper text / selected task preview -->
-    <div id="sidebarPreview" class="p-3 text-white">
-      <h5 id="previewTitle" class="mb-1">Select a task or create a new one</h5>
-      <p id="previewDesc" class="small mb-0 text-muted"></p>
-    </div>
-  </div>
-</div>
-
-<script>
-  (function() {
-    const addForm = document.querySelector('form[action="/add"]'); // existing add form
-    if (!addForm) return;
-
-    const titleIn = addForm.querySelector('input[name="title"]');
-    const descIn = addForm.querySelector('textarea[name="description"]');
-    const submitBtn = addForm.querySelector('button[type="submit"]');
-
-    const newBtn = document.getElementById('newTaskBtn');
-    const taskItems = document.querySelectorAll('.task-item');
-    const previewTitle = document.getElementById('previewTitle');
-    const previewDesc = document.getElementById('previewDesc');
-
-    function resetToCreate() {
-      addForm.action = '/add';
-      submitBtn.textContent = 'Add Task';
-      titleIn.value = '';
-      descIn.value = '';
-      previewTitle.textContent = 'Create a new task';
-      previewDesc.textContent = '';
-    }
-
-    newBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      resetToCreate();
-      titleIn.focus();
-      window.scrollTo({ top: addForm.getBoundingClientRect().top + window.scrollY - 20, behavior: 'smooth' });
-    });
-
-    taskItems.forEach(item => {
-      item.addEventListener('click', function(e) {
-        // If clicking the edit button, open edit mode; if clicking elsewhere, preview only
-        const isEdit = e.target.classList.contains('edit-side');
-        const id = item.dataset.id;
-        const title = item.dataset.title || '';
-        const desc = item.dataset.desc || '';
-
-        previewTitle.textContent = title || 'Untitled';
-        previewDesc.textContent = desc || '';
-
-        if (isEdit) {
-          addForm.action = '/edit/' + id;
-          submitBtn.textContent = 'Save Changes';
-          titleIn.value = title;
-          descIn.value = desc;
-          titleIn.focus();
-          window.scrollTo({ top: addForm.getBoundingClientRect().top + window.scrollY - 20, behavior: 'smooth' });
-        }
-      });
-    });
-
-    // If user manually edits the form, keep it in "create" mode unless changed by an edit button
-    addForm.addEventListener('input', function() {
-      if (addForm.action.endsWith('/add')) return;
-      // leave edit action intact until user clicks "Create" to reset
-    });
-  })();
-</script>
-

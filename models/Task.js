@@ -1,11 +1,11 @@
-// models/Task.js
 const mongoose = require('mongoose');
 
-// Task schema
 const taskSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  description: String
+  description: String,
+  dueDate: Date,
+  priority: { type: String, default: "Medium" },
+  completed: { type: Boolean, default: false }
 });
 
-// Export model
 module.exports = mongoose.model('Task', taskSchema);

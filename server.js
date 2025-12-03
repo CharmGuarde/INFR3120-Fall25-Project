@@ -20,26 +20,26 @@ const PORT = process.env.PORT || 3000;
 // -------------------------------------------------------
 //  MIDDLEWARE
 // -------------------------------------------------------
-app.use(express.urlencoded({ extended: true }));                  // Parse form data
-app.use(express.static(path.join(__dirname, 'public')));          // Serve static files
-app.set('view engine', 'ejs');                                    // Template engine
+app.use(express.urlencoded({ extended: true }));      // Parse form data
+app.use(express.static(path.join(__dirname, 'public'))); // Static files
+app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(expressLayouts);                                          // Layout support
-app.set('layout', 'layout');                                      // Default layout file
+app.use(expressLayouts);
+app.set('layout', 'layout');
 
-// User session configuration
+// User session setup
 app.use(
   session({
-    secret: 'supersecretkey123',   
+    secret: 'supersecretkey123', 
     resave: false,
     saveUninitialized: false
   })
 );
 
-// Make user info available to ALL EJS files
+// Make user data available to every EJS page
 app.use((req, res, next) => {
-  res.locals.user = req.session.userId;        // true/false
-  res.locals.username = req.session.username;  // display name on navbar
+  res.locals.user = req.session.userId;
+  res.locals.username = req.session.username;
   next();
 });
 
@@ -54,11 +54,11 @@ mongoose
 
 
 // -------------------------------------------------------
-//  AUTH MIDDLEWARE (Protect routes)
+//  LOGIN PROTECTION MIDDLEWARE
 // -------------------------------------------------------
 function requireLogin(req, res, next) {
   if (!req.session.userId) {
-    return res.redirect('/login');
+    return res.redirect('/login'); // Force login first
   }
   next();
 }
@@ -73,10 +73,9 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-// Save new user
+// Register user
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
-
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await User.create({
@@ -93,7 +92,7 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
-// Login logic
+// Handle login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -103,14 +102,14 @@ app.post('/login', async (req, res) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.send('Incorrect password.');
 
-  // Store user session
+  // Success → store session
   req.session.userId = user._id;
   req.session.username = user.username;
 
   res.redirect('/tasks');
 });
 
-// Logout user
+// Logout
 app.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/login');
@@ -121,26 +120,19 @@ app.get('/logout', (req, res) => {
 // -------------------------------------------------------
 //  GENERAL ROUTES
 // -------------------------------------------------------
-
-// Home page
 app.get('/', (req, res) => {
   res.render('home');
 });
 
-// About page
 app.get('/about', (req, res) => {
   res.render('about');
 });
 
-// Contact (GET)
 app.get('/contact', (req, res) => {
   res.render('contact');
 });
 
-// Contact (POST)
 app.post('/contact', (req, res) => {
-  console.log("📩 Contact form submission:", req.body);
-
   res.render('contact-success', {
     name: req.body.name
   });
@@ -151,26 +143,26 @@ app.post('/contact', (req, res) => {
 //  TASK ROUTES
 // -------------------------------------------------------
 
-// List tasks (no login required to view)
-app.get('/tasks', async (req, res) => {
+// Tasks page (now login required to view this page)
+app.get('/tasks', requireLogin, async (req, res) => {
   const tasks = await Task.find();
   res.render('index', { tasks });
 });
 
-// Create task (requires login)
+// Add task
 app.post('/add', requireLogin, async (req, res) => {
   const { title, description } = req.body;
   if (title) await Task.create({ title, description });
   res.redirect('/tasks');
 });
 
-// Edit task (requires login)
+// Edit task
 app.post('/edit/:id', requireLogin, async (req, res) => {
   await Task.findByIdAndUpdate(req.params.id, req.body);
   res.redirect('/tasks');
 });
 
-// Delete task (requires login)
+// Delete task
 app.post('/delete/:id', requireLogin, async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
   res.redirect('/tasks');

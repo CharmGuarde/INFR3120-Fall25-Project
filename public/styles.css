@@ -226,3 +226,39 @@ footer {
    margin-left: 0;
   }
 }
+
+
+
+
+
+
+
+
+/* Task Page Layout */
+.tasks-page {
+  padding-top: 120px;
+}
+
+/* Grid of task cards */
+.task-grid {
+  display: grid;
+  gap: 16px;
+}
+
+/* Wide screens: 2 columns */
+@media (min-width: 768px) {
+  .task-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Small screen: full width cards */
+@media (max-width: 767px) {
+  .task-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.task-card h5 {
+  margin-bottom: 6px;
+}
