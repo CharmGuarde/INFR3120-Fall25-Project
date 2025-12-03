@@ -139,9 +139,6 @@ app.post('/contact', (req, res) => {
 });
 
 
-// -------------------------------------------------------
-//  TASK ROUTES
-// -------------------------------------------------------
 
 // -------------------------------------------------------
 //  TASK ROUTES
@@ -185,6 +182,13 @@ app.post('/delete/:id', requireLogin, async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
   res.redirect('/tasks');
 });
+
+// Edit Task Page
+app.get('/edit/:id', requireLogin, async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  res.render('edit', { task });
+});
+
 
 
 // -------------------------------------------------------

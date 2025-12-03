@@ -1,0 +1,42 @@
+<div class="page-container d-flex justify-content-center w-100">
+  <div class="glass-card w-100" style="max-width: 650px;">
+
+    <h2 class="text-center text-white mb-4">Edit Task</h2>
+
+    <form action="/edit/<%= task._id %>" method="POST">
+
+      <div class="mb-3">
+        <label class="form-label text-white">Title</label>
+        <input 
+          type="text" 
+          name="title" 
+          class="form-control" 
+          value="<%= task.title %>" 
+          required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-white">Due Date</label>
+        <input 
+          type="date" 
+          name="dueDate" 
+          class="form-control"
+          value="<%= task.dueDate ? task.dueDate.toISOString().split('T')[0] : '' %>">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-white">Description</label>
+        <textarea 
+          name="description" 
+          class="form-control" 
+          rows="3"><%= task.description %></textarea>
+      </div>
+
+      <button class="btn btn-primary w-100 glass-btn mt-2">Save Changes</button>
+
+      <a href="/tasks" class="btn btn-secondary w-100 mt-3 glass-btn">Cancel</a>
+
+    </form>
+
+  </div>
+</div>
