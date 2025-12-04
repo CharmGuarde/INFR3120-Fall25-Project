@@ -31,13 +31,14 @@
       <h3 class="text-white mb-3">Task List</h3>
 
       <% if (tasks.length === 0) { %>
-        <p class="text-center text-light">No tasks yet. Add one above! 😊</p>
+        <p class="text-center text-light">No tasks yet. Add one above!</p>
       <% } else { %>
 
       <table class="table table-hover table-bordered align-middle">
         <thead>
           <tr>
             <th>Title</th>
+            <th>Description</th>
             <th>Due</th>
             <th>Status</th>
             <th class="text-center">Actions</th>
@@ -49,6 +50,8 @@
           <tr class="task-row <%= task.completed ? 'completed-task' : '' %>">
             <td><%= task.title %></td>
 
+            <td><%= task.description || '—' %></td>
+            <!-- talk about this new -->
             <td>
               <%= task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '—' %>
             </td>
@@ -62,7 +65,7 @@
             </td>
 
             <td class="text-center">
-
+              <!-- talk about this new-->
               <form action="/toggle/<%= task._id %>" method="POST" class="d-inline">
                 <button class="btn btn-sm btn-success"><%= task.completed ? 'Undo' : 'Done' %></button>
               </form>
