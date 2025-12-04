@@ -1,14 +1,23 @@
-# Charm & Karnan Project Part 2 
+# Charm & Karnan Project Part 3
 ## Overview
-For our final project, we decided to create a Task Manager. For the first part of the project, we made a simple layout that helped to show what our main goal was, which was creating a simple basic task manager. 
+For our final project, we created a simple Task Manager. 
+
+A web app that allows users to add tasks/assignments with due dates and a description. 
+It gets added to a list and are given options to edit, delete and click done.
+Data inputted are secure and visible to your own account.  
+
+We implemented course material such as EJS, Bootstrap, CSS, Awesome Fonts, Authentication, MongoDB, and Node.js.
+Other resources we used were found online. 
 
 ------------------------------------------------------------------------------------------------
 
 ## Structure 
-My website has 3 links
-1. homepage (home.ejs) - Welcome page, with 2 buttons 
-2. task (index.ejs) - Add, edit, delete, and has the list of the tasks you created  
-3. contact (contact.ejs) - How to contact us 
+The website has 5 links
+1. homepage (home.ejs) - Welcome page, with 1 buttons 
+2. about (aboute.ejs) - Talks about what the webapp is used for and shows resources used
+3. task (index.ejs) - Add, edit, delete, and has the list of the tasks you created
+4. settings (settings.ejs) - Option to reset password and logout   
+5. contact (contact.ejs) - How to contact us 
 
 ------------------------------------------------------------------------------------------------
 
@@ -17,6 +26,7 @@ My website has 3 links
 2. GitHub 
 3. MongoDB Atlas
 4. Render 
+5. Canva (logo)
 
 ------------------------------------------------------------------------------------------------
 
@@ -36,6 +46,8 @@ My website has 3 links
 7. MongoDB; used for CRUD
 8. Stack Overflow 
 9. W3Schools  
+
+More resources found in website (About page) with links 
 
 ------------------------------------------------------------------------------------------------
 
