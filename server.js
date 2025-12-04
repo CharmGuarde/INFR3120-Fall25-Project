@@ -195,14 +195,16 @@ app.post('/add', requireLogin, async (req, res) => {
   res.redirect('/tasks');
 });
 
+
 // Toggle Completed (Done / Undo)
 app.post('/toggle/:id', requireLogin, async (req, res) => {
-  const task = await Task.findByOne({_id: req.params.id, user: req.session.userId}); /* ADDEDDD THIIIISS NEWWWWW */
-  if (!task) return res.redirect('/tasks'); /* ADDEDDD THIIIISS NEWWWWW */
+  const task = await Task.findOne({ _id: req.params.id, user: req.session.userId });
+  if (!task) return res.redirect('/tasks');
   task.completed = !task.completed;
   await task.save();
   res.redirect('/tasks');
 });
+
 
 // Delete task
 app.post('/delete/:id', requireLogin, async (req, res) => {
@@ -210,11 +212,25 @@ app.post('/delete/:id', requireLogin, async (req, res) => {
   res.redirect('/tasks');
 });
 
+// ------------------------------------------------------- newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // Edit Task Page
 app.get('/edit/:id', requireLogin, async (req, res) => {
-  await Task.findOneAndUpdate({_id: req.params.id, user: req.session.userId}, req.body); /* ADDEDDD THIIIISS NEWWWWW */
+  const task = await Task.findOne({ _id: req.params.id, user: req.session.userId });
+  if (!task) return res.redirect('/tasks');
   res.render('edit', { task });
 });
+
+// new aswell 
+// Update task
+app.post('/edit/:id', requireLogin, async (req, res) => {
+  await Task.findOneAndUpdate(
+    { _id: req.params.id, user: req.session.userId },
+    req.body
+  );
+  res.redirect('/tasks');
+});
+
+
 
 // -------------------------------------------------------
 //  START SERVER
