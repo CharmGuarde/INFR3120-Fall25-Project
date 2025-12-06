@@ -226,7 +226,7 @@ footer {
    margin-left: 0;
   }
 }
-/* NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 8*/
+
 /* Task table spacing fix */
 .task-table-wrapper {
   margin-top: 20px;
@@ -243,7 +243,7 @@ footer {
   border-color: rgba(255,255,255,0.2) !important;
 }
 
-/* NEWWWWWWWWWWWWWWWWWWWW */
+
 
 .resource-card {
   min-height: 320px; /* Bigger space for text */
@@ -272,7 +272,7 @@ footer {
   color: #0d6efd;
 }
 
-/* NEW: Side images styling */
+
 .home-side-img {
   width: 100%;
   max-width: 140px;
