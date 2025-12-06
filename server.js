@@ -73,7 +73,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('login', { error: null }); // NEW
+  res.render('login', { error: null }); 
 });
 
 app.post('/login', async (req, res) => {
@@ -82,12 +82,12 @@ app.post('/login', async (req, res) => {
   const user = await User.findOne({ username });
   
   if (!user) {
-    return res.render('login', { error: "User not found." }); // NEW
+    return res.render('login', { error: "User not found." });
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.render('login', { error: "Incorrect password." }); // NEW
+    return res.render('login', { error: "Incorrect password." });
   }
 
   req.session.userId = user._id;
