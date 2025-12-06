@@ -5,26 +5,26 @@
   il means list item
 -->
 
-<nav class="glass-nav navbar navbar-expand-lg fixed-top">
-  <div class="container">
+<nav class="glass-nav navbar navbar-expand-lg fixed-top"> <!-- glass nav style with bootstrap classes -->
+  <div class="container"> <!-- container for proper alignment and spacing -->
 
     <!-- Logo -->
-    <a class="navbar-brand fw-bold text-white" href="/">
-      <img src="/logo.png" class="nav-logo me-2" />
+    <a class="navbar-brand fw-bold text-white" href="/"> <!-- brand link to home -->
+      <img src="/logo.png" class="nav-logo me-2" /> <!-- logo image with margin-end -->
       Task Manager
     </a>
 
     <!-- Mobile Menu Button -->
-    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-      <i class="fas fa-bars"></i>
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"> <!-- bootstrap collapse for mobile, data-bs-target="#navMenu" links to menu div -->
+      <i class="fas fa-bars"></i> <!-- "fas fa-bars" is the hamburger icon from Font Awesome -->
     </button>
 
     <!-- Menu Items -->
-    <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav ms-auto align-items-center">
+    <div class="collapse navbar-collapse" id="navMenu"> <!-- collapsible menu div with matching id -->
+      <ul class="navbar-nav ms-auto align-items-center"> <!-- unordered list with margin-start auto to align right -->
 
         <!-- Always visible links -->
-        <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li> 
         <li class="nav-item"><a class="nav-link text-white" href="/about">About</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="/contact">Contact</a></li>
 

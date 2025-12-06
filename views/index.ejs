@@ -1,40 +1,40 @@
-<div class="page-container d-flex justify-content-center w-100">
-  <div class="glass-card w-100" style="max-width: 850px;">
+<div class="page-container d-flex justify-content-center w-100"> <!-- main glass card container -->
+  <div class="glass-card w-100" style="max-width: 850px;"> <!-- glass card -->
 
     <!-- Page Title -->
-    <h1 class="text-center text-white mb-4">Your Tasks</h1>
+    <h1 class="text-center text-white mb-4">Your Tasks</h1> <!-- page title -->
 
     <!-- Add Task Form -->
-    <form action="/add" method="POST" class="mb-4">
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label text-white">Title</label>
-          <input type="text" name="title" class="form-control" required placeholder="Task name">
+    <form action="/add" method="POST" class="mb-4"> <!-- add task form -->
+      <div class="row"> <!-- first row: title and due date -->
+        <div class="col-md-6 mb-3"> <!-- title input -->
+          <label class="form-label text-white">Title</label> <!--title label -->
+          <input type="text" name="title" class="form-control" required placeholder="Task name"> <!-- title input field -->
         </div>
 
-        <div class="col-md-6 mb-3">
-          <label class="form-label text-white">Due Date</label>
-          <input type="date" name="dueDate" class="form-control">
+        <div class="col-md-6 mb-3"> <!-- due date input -->
+          <label class="form-label text-white">Due Date</label> <!-- due date label -->
+          <input type="date" name="dueDate" class="form-control"> <!-- due date input field -->
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3"> <!-- description input -->
         <label class="form-label text-white">Description</label>
-        <textarea name="description" class="form-control" rows="2"></textarea>
+        <textarea name="description" class="form-control" rows="2"></textarea> <!-- description input field -->
       </div>
 
-      <button class="btn btn-primary w-100 glass-btn">Add Task</button>
+      <button class="btn btn-primary w-100 glass-btn">Add Task</button> <!-- submit button -->
     </form>
 
     <!-- Task List -->
-    <div class="task-table-wrapper mt-4">
-      <h3 class="text-white mb-3">Task List</h3>
+    <div class="task-table-wrapper mt-4"> <!-- task list container -->
+      <h3 class="text-white mb-3">Task List</h3> <!-- task list title -->
 
-      <% if (tasks.length === 0) { %>
-        <p class="text-center text-light">No tasks yet. Add one above!</p>
+      <% if (tasks.length === 0) { %> <!-- if (tasks.length === 0), this means ff the array tasks has a length of zero (no items)… then run the HTML/JS code inside this block-->
+        <p class="text-center text-light">No tasks yet. Add one above!</p> 
       <% } else { %>
 
-      <table class="table table-hover table-bordered align-middle">
+      <table class="table table-hover table-bordered align-middle"> <!-- task table -->
         <thead>
           <tr>
             <th>Title</th>
@@ -45,9 +45,9 @@
           </tr>
         </thead>
 
-        <tbody>
-          <% tasks.forEach(task => { %>
-          <tr class="task-row <%= task.completed ? 'completed-task' : '' %>">
+        <tbody> 
+          <% tasks.forEach(task => { %> <!-- for each task in the tasks array, do the following: -->
+          <tr class="task-row <%= task.completed ? 'completed-task' : '' %>"> <!-- this means if task.completed is true, add the class completed-task to this row -->
             <td><%= task.title %></td>
 
             <td><%= task.description || '—' %></td>
