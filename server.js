@@ -27,7 +27,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);
 app.set('layout', 'layout');
 
-// User session setup
 app.use(
   session({
     secret: 'supersecretkey123',
@@ -36,7 +35,6 @@ app.use(
   })
 );
 
-// Make user data available to templates
 app.use((req, res, next) => {
   res.locals.user = req.session.userId;
   res.locals.username = req.session.username;
@@ -54,7 +52,7 @@ mongoose
 
 
 // -------------------------------------------------------
-// LOGIN PROTECTION MIDDLEWARE
+// LOGIN PROTECTION
 // -------------------------------------------------------
 function requireLogin(req, res, next) {
   if (!req.session.userId) return res.redirect('/login');
@@ -70,21 +68,27 @@ app.get('/register', (req, res) => res.render('register'));
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
-
   await User.create({ username, email, password: hashedPassword });
   res.redirect('/login');
 });
 
-app.get('/login', (req, res) => res.render('login'));
+app.get('/login', (req, res) => {
+  res.render('login', { error: null }); // NEW
+});
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   const user = await User.findOne({ username });
-  if (!user) return res.send('User not found.');
+  
+  if (!user) {
+    return res.render('login', { error: "User not found." }); // NEW
+  }
 
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.send('Incorrect password.');
+  if (!isMatch) {
+    return res.render('login', { error: "Incorrect password." }); // NEW
+  }
 
   req.session.userId = user._id;
   req.session.username = user.username;
@@ -100,7 +104,6 @@ app.get('/reset-password', requireLogin, (req, res) => {
   res.render('reset-password', { message: null });
 });
 
-// Handle Password Reset
 app.post('/reset-password', requireLogin, async (req, res) => {
   const { newPassword, confirmPassword } = req.body;
 
@@ -126,7 +129,6 @@ app.post('/contact', (req, res) => {
   res.render('contact-success', { name: req.body.name });
 });
 
-// Settings Page
 app.get('/settings', requireLogin, (req, res) => res.render('settings'));
 
 
@@ -134,7 +136,7 @@ app.get('/settings', requireLogin, (req, res) => res.render('settings'));
 // TASK ROUTES
 // -------------------------------------------------------
 app.get('/tasks', requireLogin, async (req, res) => {
-  const tasks = await Task.find({ user: req.session.userId }); 
+  const tasks = await Task.find({ user: req.session.userId });
   res.render('index', { tasks });
 });
 
@@ -142,7 +144,7 @@ app.post('/add', requireLogin, async (req, res) => {
   const { title, description, dueDate } = req.body;
 
   await Task.create({
-    user: req.session.userId, 
+    user: req.session.userId,
     title,
     description,
     dueDate: dueDate ? new Date(dueDate) : null,
@@ -162,7 +164,7 @@ app.post('/toggle/:id', requireLogin, async (req, res) => {
 });
 
 app.post('/delete/:id', requireLogin, async (req, res) => {
-  await Task.findOneAndDelete({ _id: req.params.id, user: req.session.userId }); 
+  await Task.findOneAndDelete({ _id: req.params.id, user: req.session.userId });
   res.redirect('/tasks');
 });
 
@@ -174,7 +176,7 @@ app.get('/edit/:id', requireLogin, async (req, res) => {
   res.render('edit', { task });
 });
 
-// Update task
+// Update Task
 app.post('/edit/:id', requireLogin, async (req, res) => {
   await Task.findOneAndUpdate(
     { _id: req.params.id, user: req.session.userId },
@@ -187,4 +189,6 @@ app.post('/edit/:id', requireLogin, async (req, res) => {
 // -------------------------------------------------------
 // START SERVER
 // -------------------------------------------------------
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running at http://localhost:${PORT}`)
+);
