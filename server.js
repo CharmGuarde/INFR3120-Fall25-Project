@@ -95,7 +95,6 @@ app.get('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/login'));
 });
 
-// NEWWWW CODE ---------------
 // Reset Password Page
 app.get('/reset-password', requireLogin, (req, res) => {
   res.render('reset-password', { message: null });
@@ -114,7 +113,6 @@ app.post('/reset-password', requireLogin, async (req, res) => {
 
   res.render('reset-password', { message: 'Password updated successfully!' });
 });
-// NEWWWW CODE ----------------
 
 
 // -------------------------------------------------------
@@ -128,7 +126,6 @@ app.post('/contact', (req, res) => {
   res.render('contact-success', { name: req.body.name });
 });
 
-// NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW CODE -------------------------
 // Settings Page
 app.get('/settings', requireLogin, (req, res) => res.render('settings'));
 
@@ -137,7 +134,7 @@ app.get('/settings', requireLogin, (req, res) => res.render('settings'));
 // TASK ROUTES
 // -------------------------------------------------------
 app.get('/tasks', requireLogin, async (req, res) => {
-  const tasks = await Task.find({ user: req.session.userId }); // ADDEDDD THIIIISS NEWWWWW
+  const tasks = await Task.find({ user: req.session.userId }); 
   res.render('index', { tasks });
 });
 
@@ -145,7 +142,7 @@ app.post('/add', requireLogin, async (req, res) => {
   const { title, description, dueDate } = req.body;
 
   await Task.create({
-    user: req.session.userId, // ADDEDDD THIIIISS NEWWWWW
+    user: req.session.userId, 
     title,
     description,
     dueDate: dueDate ? new Date(dueDate) : null,
@@ -165,11 +162,10 @@ app.post('/toggle/:id', requireLogin, async (req, res) => {
 });
 
 app.post('/delete/:id', requireLogin, async (req, res) => {
-  await Task.findOneAndDelete({ _id: req.params.id, user: req.session.userId }); // ADDEDDD THIIIISS NEWWWWW
+  await Task.findOneAndDelete({ _id: req.params.id, user: req.session.userId }); 
   res.redirect('/tasks');
 });
 
-// ------------------------------------------------------- newwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // Edit Task Page
 app.get('/edit/:id', requireLogin, async (req, res) => {
   const task = await Task.findOne({ _id: req.params.id, user: req.session.userId });
