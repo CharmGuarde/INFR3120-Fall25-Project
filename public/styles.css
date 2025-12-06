@@ -272,6 +272,27 @@ footer {
   color: #0d6efd;
 }
 
+/* NEW: Side images styling */
+.home-side-img {
+  width: 100%;
+  max-width: 140px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+
+.home-side-img:hover {
+  transform: scale(1.05);
+}
+
+/* Mobile: hide side images for clean view */
+@media (max-width: 768px) {
+  .home-side-img {
+    display: none;
+  }
+}
+
 
 
 
